@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workspace>
+    <project>
+        <path>$WS_DIR$\..\..\..\f411\project\f411test.ewp</path>
+    </project>
+    <project>
+        <path>$WS_DIR$\Sport1_Mid.ewp</path>
+    </project>
+    <batchBuild />
+</workspace>
