@@ -54,6 +54,7 @@ int main(void)
                 state = exercise_mode(&mechineData);
                 break;
             case USER_SET:
+                state = setup_mode(&mechineData);
                 break;
             default:
                 break;
