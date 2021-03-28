@@ -1,8 +1,17 @@
 #include "setup_mode.h"
+#include "keypad.h"
+#include "systick.h"
+#include "screen.h"
 /*******************************************************************************
  * Variables
  ******************************************************************************/
 uint8_t modeState;
+uint8_t IsDataChanged;
+/*******************************************************************************
+ * Definition
+ ******************************************************************************/
+#define NO      1
+#define YES     0
 /*******************************************************************************
  * Private func
  ******************************************************************************/
@@ -15,7 +24,7 @@ uint8_t modeState;
 static void increase_val(run_mechine_data_t *mechineData)
 {
     if(modeState == 0)
-        mechineData->runTime += 1;
+        mechineData->runTime.minute += 1;
     else if(modeState == 1)
         mechineData->dis += 1;
     else if(modeState == 2)
@@ -32,7 +41,7 @@ static void increase_val(run_mechine_data_t *mechineData)
 static void decrease_val(run_mechine_data_t *mechineData)
 {
     if(modeState == 0)
-        mechineData->runTime -= 1;
+        mechineData->runTime.minute -= 1;
     else if(modeState == 1)
         mechineData->dis -= 1;
     else if(modeState == 2)
@@ -53,35 +62,50 @@ program_state_t setup_mode(run_mechine_data_t *mechineData)
     char key = NO_KEY;
     
     /* Show screen */
-
+    if(IsDataChanged == YES)
+    {
+        updateCalo(mechineData->clo);
+        updateDistance(mechineData->dis);
+        //updateSpeed(mechineData->dataSpeed);
+        //updateIncline(mechineData->incline);
+        updateTime(mechineData->runTime.minute);
+    }
+    IsDataChanged = NO;    
     /* Scan key */
     key = KEYPAD_ScanKey();
     switch(key)
     {
         case '9':
-            modeState += 1;
+            SYSTICK_Delay_ms(200);
+                modeState += 1;
             stateReturn = USER_SET;
             break;
         case '4':
             increase_val(mechineData);
+            IsDataChanged = YES;
             stateReturn = USER_SET;
             break;
         case '5':
             decrease_val(mechineData);
+            IsDataChanged = YES;
             stateReturn = USER_SET;
             break;
         case 'A':
             increase_val(mechineData);
+            IsDataChanged = YES;
             stateReturn = USER_SET;
             break;
         case 'B':
             decrease_val(mechineData);
+            IsDataChanged = YES;
             stateReturn = USER_SET;
             break;
         case '7':
+            IsDataChanged = YES;
             stateReturn = RUN;
             break;
         case '8':
+            IsDataChanged = YES;
             stateReturn = START;
             break;
         default:
@@ -90,7 +114,9 @@ program_state_t setup_mode(run_mechine_data_t *mechineData)
     if(modeState > 2)
     {
         modeState = 0;
+        IsDataChanged = YES;
         stateReturn = START;
+        SYSTICK_Delay_ms(30);
     }
     return (stateReturn);
 }

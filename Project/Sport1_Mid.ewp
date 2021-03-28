@@ -356,6 +356,7 @@
                     <state>$PROJ_DIR$\..\Common</state>
                     <state>$PROJ_DIR$\..\Mid\inc</state>
                     <state>$PROJ_DIR$\..\Mid\src</state>
+                    <state>$PROJ_DIR$\..\Device</state>
                 </option>
                 <option>
                     <name>CCStdIncCheck</name>
@@ -2191,6 +2192,15 @@
         </file>
     </group>
     <group>
+        <name>Device</name>
+        <file>
+            <name>$PROJ_DIR$\..\Device\screen.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\Device\screen.h</name>
+        </file>
+    </group>
+    <group>
         <name>Driver_St</name>
         <group>
             <name>inc</name>
@@ -2346,6 +2356,15 @@
             </file>
             <file>
                 <name>$PROJ_DIR$\..\Driver_User\inc\keypad.h</name>
+            </file>
+        </group>
+        <group>
+            <name>lcd</name>
+            <file>
+                <name>$PROJ_DIR$\..\Driver_User\src\lcd.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\Driver_User\inc\lcd.h</name>
             </file>
         </group>
         <group>

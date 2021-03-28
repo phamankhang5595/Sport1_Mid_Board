@@ -186,7 +186,7 @@ char KEYPAD_ScanKey()
     if(isKeyPressed())
     {
         /* Debounce time */
-        SYSTICK_Delay_ms(20);
+        SYSTICK_Delay_ms(10);
         if(isKeyPressed())
         {
             setColX(Col_1);

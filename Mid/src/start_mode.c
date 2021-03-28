@@ -1,4 +1,8 @@
 #include "start_mode.h"
+#include "keypad.h"
+#include "common.h"
+#include "screen.h"
+#include "lcd.h"
 /*******************************************************************************
  * Code
  ******************************************************************************/
@@ -12,8 +16,11 @@ program_state_t start_mode()
 {
     program_state_t stateReturn;
     char key = NO_KEY;
-    key = KEYPAD_ScanKey();
     /* start display */
+    lcd_clr();
+    
+    SYSTICK_Delay_ms(20);
+    key = KEYPAD_ScanKey();
     if(key == '6')
         stateReturn = EXERCISE_SET;
     else if(key == '7')

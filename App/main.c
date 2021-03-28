@@ -19,6 +19,8 @@
 #include "start_mode.h"
 #include "setup_mode.h"
 #include "exercise_mode.h"
+#include "screen.h"
+#include "lcd.h"
 /*******************************************************************************
  * Definition
  ******************************************************************************/
@@ -32,10 +34,14 @@ int main(void)
     program_state_t state = START;
     run_mechine_data_t mechineData;
     mechineData.runEx = 1;
-    mechineData.runSpeed = 1;
-    mechineData.runTime = 0;
+    mechineData.dataSpeed = 1;
+    mechineData.runTime.minute = 0;
     mechineData.dis = 0;
-    mechineData.incl = 0;
+    mechineData.incline = 0;
+    GPIO_LcdInit();
+    lcd_init();
+    lcd_clr();
+    mainScreen();
     char key;
     KEYPAD_Init();
     SYSTICK_Init();
@@ -47,8 +53,10 @@ int main(void)
                 state = start_mode();
                 break;
             case RUN:
+                state=START;
                 break;
             case STOP:
+                state=START;
                 break;
             case EXERCISE_SET:
                 state = exercise_mode(&mechineData);
