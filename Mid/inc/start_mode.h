@@ -14,7 +14,7 @@
  * @param 
  * @param 
  */
-program_state_t start_mode();
+//program_state_t start_mode();
 #endif
 /*******************************************************************************
  * EOF

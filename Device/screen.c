@@ -81,6 +81,24 @@ void updateSpeed(float speed)
     }
 }
 
+void updateEx(uint8_t runEx)
+{
+    unsigned char ch;
+    uint8_t ones = runEx % 10;
+    uint8_t tens = runEx /10;
+    lcd_send_data("P",6);
+    if(tens==0)
+    {
+        ch=0x7d;
+    }
+    else
+    {
+        ch=0x60;
+    }
+    lcd_show_data1(&ch,4);   
+    ch = ones +'0';
+    lcd_send_data(&ch,2);
+}
 
 void mainScreen()
 {
