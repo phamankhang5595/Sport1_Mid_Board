@@ -101,7 +101,6 @@ program_state_t setup_mode(run_mechine_data_t *mechineData)
         IsDataChanged = NO;
     }
 
-      
     while((key == NO_KEY)&&(ModeState < 3))
     {              
         switch(ModeState)
@@ -143,7 +142,6 @@ program_state_t setup_mode(run_mechine_data_t *mechineData)
     switch(key)
     {
         case SETUP_KEY:
-            
             while(key==SETUP_KEY)
                 key = KEYPAD_ScanKey();
             ModeState += 1;
@@ -189,6 +187,8 @@ program_state_t setup_mode(run_mechine_data_t *mechineData)
     }
     return (stateReturn);
 }
+
+
 /*******************************************************************************
  * EOF
  ******************************************************************************/
