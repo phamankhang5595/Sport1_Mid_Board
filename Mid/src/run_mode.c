@@ -5,7 +5,7 @@
 /*******************************************************************************
  * Variable
  ******************************************************************************/
-uint32_t IsThisTheFirstRun;
+uint32_t IsThisTheFirstRun = YES;
 /*******************************************************************************
  * Code
  ******************************************************************************/
@@ -16,6 +16,7 @@ program_state_t runMode(run_mechine_data_t *mechineData)
     if(IsThisTheFirstRun == YES)
     {
         /* screen countdown 3s */
+        waittingScreen(mechineData);
         IsThisTheFirstRun = NO;
     }
 
@@ -36,8 +37,6 @@ program_state_t runMode(run_mechine_data_t *mechineData)
         IsDataChanged = NO;
     }
     
-
-
     key = KEYPAD_ScanKey();
     switch (key)
     {

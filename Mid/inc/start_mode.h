@@ -14,7 +14,7 @@
  * @param 
  * @param 
  */
-program_state_t start_mode();
+program_state_t start_mode(run_mechine_data_t *mechineData);
 #endif
 /*******************************************************************************
  * EOF

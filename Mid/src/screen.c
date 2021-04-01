@@ -1,6 +1,24 @@
 #include <stdint.h>
 #include "lcd.h"
 #include "screen.h"
+#include "keypad.h"
+
+
+/*******************************************************************************
+ * Code
+ ******************************************************************************/
+char delay_and_scand(uint32_t ms)
+{
+    char key;
+    uint32_t mS=ms*484;
+    key=KEYPAD_ScanKey();
+    while((key != STOP_KEY) && (mS))   
+    {
+        key=KEYPAD_ScanKey(); 
+        mS--;
+    }
+    return (key);
+}
 
 static void Screen_convertData(float dataIn, unsigned char* dataOut)
 {
@@ -95,7 +113,7 @@ void updateEx(uint8_t runEx)
     {
         ch=0x60;
     }
-    lcd_show_data1(&ch,4);   
+    lcd_show_data1(&ch,4);
     ch = ones +'0';
     lcd_send_data(&ch,2);
 }
@@ -107,5 +125,36 @@ void mainScreen()
     {
          lcd_send_data("0",i);
          delay(1000);
+    }
+}
+
+void waittingScreen(run_mechine_data_t *mechineDate)
+{
+    uint8_t count=3;
+    char key;
+    unsigned char ch;
+    lcd_clr();
+    updateCalo(mechineDate->calo);
+    updateDistance(mechineDate->distance);
+    updateIncline(mechineDate->incline);
+    updateTime(mechineDate->runTime);
+    key=KEYPAD_ScanKey();
+    while((count)&&(key!=STOP_KEY))
+    {
+        switch(count)
+        {
+        case 3:
+            ch = 0x7a;
+            break;
+        case 2:
+            ch = 0x3e;
+            break;
+        case 1:
+            ch = 0x60;
+            break;
+        }
+        lcd_show_data1(&ch,4);
+        key = delay_and_scand(500);
+        count--;
     }
 }

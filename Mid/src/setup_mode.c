@@ -2,6 +2,7 @@
 #include "keypad.h"
 #include "systick.h"
 #include "screen.h"
+#include "lcd.h"
 /*******************************************************************************
  * Variables
  ******************************************************************************/
@@ -25,9 +26,12 @@ static void increase_val(run_mechine_data_t *mechineData)
 {
     if(ModeState == 0)
     {
-        mechineData->runTime += 1;
-        if(mechineData->runTime > MAX_RUN_TIME)
-            mechineData->runTime = MAX_RUN_TIME;            /* maximum runtime value */
+        if(mechineData->runTime < 3600)
+        {
+            mechineData->runTime += 60;
+        }
+        else
+            mechineData->runTime = 3600;            /* minimum runtime value */
     }
     else if(ModeState == 1)
     {
@@ -54,9 +58,12 @@ static void decrease_val(run_mechine_data_t *mechineData)
 {
     if(ModeState == 0)
     {
-        mechineData->runTime -= 1;
-        if(mechineData->runTime < 1)
-            mechineData->runTime = 1;            /* minimum runtime value */
+        if(mechineData->runTime > 60)
+        {
+            mechineData->runTime -= 60;
+        }
+        else
+            mechineData->runTime = 0;            /* minimum runtime value */
     }
     else if(ModeState == 1)
     {
@@ -82,7 +89,7 @@ static void decrease_val(run_mechine_data_t *mechineData)
  */
 program_state_t setup_mode(run_mechine_data_t *mechineData)
 {
-    program_state_t stateReturn;
+    static program_state_t stateReturn;
     char key = NO_KEY;
     
     /* Show screen */
@@ -92,13 +99,53 @@ program_state_t setup_mode(run_mechine_data_t *mechineData)
         updateDistance(mechineData->distance);
         updateTime(mechineData->runTime);
         IsDataChanged = NO;
-    }   
+    }
+
+      
+    while((key == NO_KEY)&&(ModeState < 3))
+    {              
+        switch(ModeState)
+        {
+        case 0:
+            updateTime(mechineData->runTime);
+            break;
+        case 1:
+            updateDistance(mechineData->distance);
+            break;
+        case 2:
+            updateCalo(mechineData->calo);
+            break;
+        default:
+            break;
+        }
+        key = delay_and_scand(300);
+        
+        if(key != NO_KEY)
+        {
+            break;
+        } 
+        if (ModeState==0)
+        {
+            lcd_clr_section(0,7);            
+        }
+        if (ModeState == 1)
+        {
+            lcd_clr_section(14,3);
+        }
+        if(ModeState == 2)
+        {
+            lcd_clr_section(20,3);
+        }
+        key = delay_and_scand(300);
+    } 
     /* Scan key */
     key = KEYPAD_ScanKey();
     switch(key)
     {
         case SETUP_KEY:
-            SYSTICK_Delay_ms(200);
+            
+            while(key==SETUP_KEY)
+                key = KEYPAD_ScanKey();
             ModeState += 1;
             stateReturn = USER_SET;
             break;

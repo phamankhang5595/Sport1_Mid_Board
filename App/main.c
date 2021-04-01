@@ -19,6 +19,8 @@
 #include "start_mode.h"
 #include "setup_mode.h"
 #include "exercise_mode.h"
+#include "run_mode.h"
+#include "stop_mode.h"
 #include "screen.h"
 #include "lcd.h"
 /*******************************************************************************
@@ -40,7 +42,6 @@ int main(void)
     GPIO_LcdInit();
     lcd_init();
     lcd_clr();
-    mainScreen();
     KEYPAD_Init();
     SYSTICK_Init();
 	while(1)
@@ -48,13 +49,13 @@ int main(void)
        switch (state)
        {
             case START:
-                state = start_mode();
+                state = start_mode(&mechineData);
                 break;
             case RUN:
-                state=START;
+                state=runMode(&mechineData);
                 break;
             case STOP:
-                state=START;
+                state=stopMode(&mechineData);
                 break;
             case EXERCISE_SET:
                 state = exercise_mode(&mechineData);

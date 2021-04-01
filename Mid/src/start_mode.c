@@ -14,17 +14,14 @@
  */
 program_state_t start_mode(run_mechine_data_t *mechineData)
 {
-    program_state_t stateReturn;
+    static program_state_t stateReturn;
     char key = NO_KEY;
     /* start display */
     if(IsDataChanged == YES)
     {
         /* update screen */
-        updateCalo(mechineData->calo);
-        updateDistance(mechineData->distance);
-        updateIncline(mechineData->incline);
-        updateSpeed(mechineData->speed);
-        updateTime(mechineData->runTime);
+        resetRunMechineData(mechineData);
+        mainScreen();
         IsDataChanged = NO;
     }
     SYSTICK_Delay_ms(20);

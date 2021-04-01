@@ -2,7 +2,7 @@
 #include "stm32f10x_usart.h"   
 #include "stm32f10x_gpio.h" 
 #include "lcd.h" 
-
+#include "keypad.h"
 #define HT1621_CS           GPIO_Pin_8   
 #define HT1621_RD           GPIO_Pin_9   
 #define HT1621_WR           GPIO_Pin_10   
@@ -207,6 +207,15 @@ void delay(uint32_t MS)                                         //��ʱ
     }   
 }   
 
+
+void delay_Key(uint32_t MS,char key)                                         //��ʱ   
+{   
+    uint32_t mS=MS*484;
+    while(key == NO_KEY && (mS))   
+    {    
+        mS--;   
+    }   
+}
 /*  
 * fq  
 * LCD ��ʼ������lcd��������ʼ������  
@@ -477,6 +486,12 @@ void lcd_send_data(unsigned char *data,uint8_t address)
                     show_buf[i] = 0xb7; 
                 }                 
                 break;
+            case 'P':
+                if(address==6)
+                {
+                    show_buf[i] = 0x37;
+                }
+                break;
             default:
                 show_buf[i] = 0xff;
                 break;
@@ -489,5 +504,32 @@ void lcd_send_data(unsigned char *data,uint8_t address)
         i++;       
     }
     lcd_show_data1(show_buf,address);  
-}        
+}
+
+
+void lcd_clr_section(uint8_t address, uint8_t size)
+{   
+    unsigned char i,j;   
+       
+    GPIO_ResetBits(GPIOA,HT1621_CS);                                // CS = 0;   
+    write_mode(DAT);   
+    write_address(address);   
+       
+    for(i=0,j=address;i<size;i++,j+=2)   
+    {      
+        if(j==0)
+        {
+            write_data(0x80);
+        }
+        else if(j==12 || j==24)
+        {
+            write_data(0x08);
+        }
+        else
+        {
+            write_data(0x00);
+        }          
+    }      
+    GPIO_SetBits(GPIOA,HT1621_CS);                                  //CS = 1;   
+}
 /***************************************************end file*************************************************/   
