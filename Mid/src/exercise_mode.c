@@ -112,23 +112,23 @@ program_state_t exercise_mode(run_mechine_data_t *mechineData)
             stateReturn = EXERCISE_SET;
             break;
         case MINUS_KEY:
-            mechineData->runTime -= 1;
-            if(mechineData->runTime < 1)
-                mechineData->runTime = 1;
+            mechineData->runTime -= 60;
+            if(mechineData->runTime < MIN_RUN_TIME)
+                mechineData->runTime = MAX_RUN_TIME;
             IsDataChanged = YES;
             stateReturn = EXERCISE_SET;
             break;
         case UP_KEY:
-            mechineData->runTime += 1;
+            mechineData->runTime += 60;
             if(mechineData->runTime > MAX_RUN_TIME)
-                mechineData->runTime = 120;
+                mechineData->runTime = MIN_RUN_TIME;
             IsDataChanged = YES;
             stateReturn = EXERCISE_SET;
             break;
         case DOWN_KEY:
-            mechineData->runTime -= 1;
-            if(mechineData->runTime < 1)
-                mechineData->runTime = 0;
+            mechineData->runTime -= 60;
+            if(mechineData->runTime < MIN_RUN_TIME)
+                mechineData->runTime = MAX_RUN_TIME;
             IsDataChanged = YES;
             stateReturn = EXERCISE_SET;
             break;

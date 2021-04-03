@@ -2,10 +2,19 @@
 #include "run_mode.h"
 #include "systick.h"
 #include "screen.h"
+#include "timer2.h"
 /*******************************************************************************
  * Variable
  ******************************************************************************/
 uint32_t IsThisTheFirstRun = YES;
+uint32_t Sec;
+/*******************************************************************************
+* 
+*******************************************************************************/
+void countSec()
+{
+  Sec++;
+}
 /*******************************************************************************
  * Code
  ******************************************************************************/
@@ -16,10 +25,13 @@ program_state_t runMode(run_mechine_data_t *mechineData)
     if(IsThisTheFirstRun == YES)
     {
         /* screen countdown 3s */
+        /* start timer */
+        timer_callback_init(countSec);
         waittingScreen(mechineData);
         IsThisTheFirstRun = NO;
+        timer_2_init();
     }
-
+  
     /* Check if setup run time */
     if((mechineData->runTime > DEFAULT_RUN_TIME)/* && timer not start */)
     {
@@ -36,7 +48,7 @@ program_state_t runMode(run_mechine_data_t *mechineData)
         updateSpeed(mechineData->speed);
         IsDataChanged = NO;
     }
-    
+    updateTime(Sec);
     key = KEYPAD_ScanKey();
     switch (key)
     {
@@ -44,6 +56,7 @@ program_state_t runMode(run_mechine_data_t *mechineData)
             /* stop mode */
             IsDataChanged = YES;
             IsThisTheFirstRun = YES;
+            /* stop timer */
             stateReturn = STOP;
             break;
         case INCLINE_3_KEY:

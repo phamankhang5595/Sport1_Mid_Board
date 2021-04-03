@@ -3087,6 +3087,15 @@
                 <name>$PROJ_DIR$\..\Driver_User\inc\systick.h</name>
             </file>
         </group>
+        <group>
+            <name>timer2</name>
+            <file>
+                <name>$PROJ_DIR$\..\Driver_User\src\timer2.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\Driver_User\inc\timer2.h</name>
+            </file>
+        </group>
     </group>
     <group>
         <name>Mid</name>
