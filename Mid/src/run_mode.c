@@ -125,7 +125,7 @@ program_state_t runMode(run_mechine_data_t *mechineData, program_state_t *lastst
         checkLastStateAndTurnFlag(mechineData,laststate);
         numberOfChange = 0;
         changeMoment = mechineData->runTime *14/15;
-        
+        mechineData->speed = DEFAULT_RUN_SPEED;
         /* Start timer for count time */
         timer_2_start();
         IsThisTheFirstRun = NO; 
@@ -232,6 +232,10 @@ program_state_t runMode(run_mechine_data_t *mechineData, program_state_t *lastst
             changeMoment = Sec*14/15;
             mechineData->speed   += (Execrise[mechineData->runEx - 1][numberOfChange] >> 4) & 0x0F;
             mechineData->incline += (Execrise[mechineData->runEx - 1][numberOfChange]) & 0x0F;
+            if( ((uint32_t)(mechineData->speed)) >= 15)
+                mechineData->speed = 15;
+            if(mechineData->incline > 12)
+                mechineData->incline == 12;
             numberOfChange ++;
             IsDataChanged = YES;
         }

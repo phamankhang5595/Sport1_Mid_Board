@@ -54,10 +54,10 @@ int main(void)
                  state = start_mode(&mechineData,&laststate);
                  break;
             case RUN:
-                 state=runMode(&mechineData,&laststate);
+                 state = runMode(&mechineData,&laststate);
                  break;
             case STOP:
-                 state=stopMode(&mechineData,&laststate);
+                 state = stopMode(&mechineData,&laststate);
                  break;
             case EXERCISE_SET:
                  state = exercise_mode(&mechineData,&laststate);

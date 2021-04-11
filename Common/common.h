@@ -27,11 +27,11 @@ typedef struct
 } run_mechine_data_t;
 
 /* define default value and maximum value of data */
-#define MAX_SPEED           (15)
+#define MAX_SPEED           (14)
 #define MAX_RUN_TIME        (5940)
-#define MAX_INCLINE         (9)
-#define MAX_CALO            (300)
-#define MAX_DISTANCE        (200)
+#define MAX_INCLINE         (15)
+#define MAX_CALO            (99)
+#define MAX_DISTANCE        (99)
 #define MAX_RUN_EX          (12)
 
 #define MIN_SPEED           (15)
