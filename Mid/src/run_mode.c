@@ -17,9 +17,8 @@ uint32_t IsThisTheFirstRun = YES;
 volatile uint32_t Sec;
 uint32_t CountDownFlag = FLAG_OFF;
 uint32_t ExeRunFlag = FLAG_OFF;
-uint32_t 
-uint16_t Execrise[12][15]= {
-                            {1,2,3,4,5,6,7,8,9,2,0,0,0,0,0},
+uint8_t Execrise[12][15]= {
+                            {0x11,0x21,0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11,0x11},
                             {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
                             {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
                             {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -114,6 +113,7 @@ program_state_t runMode(run_mechine_data_t *mechineData, program_state_t *lastst
     program_state_t stateReturn;
     char key = NO_KEY;
     static uint32_t changeMoment;
+    static uint32_t numberOfChange;
     if(IsThisTheFirstRun == YES)
     {
         /* init timer 2 */
@@ -123,7 +123,9 @@ program_state_t runMode(run_mechine_data_t *mechineData, program_state_t *lastst
         waittingScreen(mechineData);
         /* turn flag */
         checkLastStateAndTurnFlag(mechineData,laststate);
+        numberOfChange = 0;
         changeMoment = mechineData->runTime *14/15;
+        
         /* Start timer for count time */
         timer_2_start();
         IsThisTheFirstRun = NO; 
@@ -228,10 +230,13 @@ program_state_t runMode(run_mechine_data_t *mechineData, program_state_t *lastst
         if(Sec == changeMoment)
         {
             changeMoment = Sec*14/15;
-            timeChangeExe ++;
-            mechineData->speed  += Execrise[]
+            mechineData->speed   += (Execrise[mechineData->runEx - 1][numberOfChange] >> 4) & 0x0F;
+            mechineData->incline += (Execrise[mechineData->runEx - 1][numberOfChange]) & 0x0F;
+            numberOfChange ++;
+            IsDataChanged = YES;
         }
     }
+    
     /* stop if out of time */
     if((Sec == 0) && (CountDownFlag))
     {
