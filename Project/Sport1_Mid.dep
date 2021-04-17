@@ -344,7 +344,7 @@
             </inputs>
         </file>
         <file>
-            <name>$PROJ_DIR$\Debug\Exe\Sport1_Mid.out</name>
+            <name>$PROJ_DIR$\..\Driver_User\src\keypad.c</name>
             <outputs>
                 <tool>
                     <name>OBJCOPY</name>
@@ -353,6 +353,10 @@
                 <tool>
                     <name>ILINK</name>
                     <file> 242</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 83</file>
                 </tool>
             </outputs>
             <inputs>
