@@ -1,15 +1,23 @@
+#include "stm32f10x.h"
 #include "stm32f10x_sdio.h"
 #include "stm32f10x_gpio.h"
 #include "stm32f10x_rcc.h"
-#include "keypad.h"
+#include "stm32f10x_gpio.h"
 #include "systick.h"
+#include "board.h"
+#include "keypad.h"
 /*******************************************************************************
  * Definition
  ******************************************************************************/
 #define NOT_PRESS   (0)
 #define PRESS       (1)
-
 #define NO_ROW      (9)
+
+/* Read write macro */
+#define KEYPAD_READ_ALL_ROW         (GPIO_ReadInputData(KEYPAD_GPIO))
+#define KEYPAD_READ_ROW(x)          (GPIO_ReadInputDataBit(KEYPAD_GPIO, x))
+#define KEYPAD_SET_COL(x)           (GPIO_SetBits(KEYPAD_GPIO,x))
+#define KEYPAD_CLR_COL(x)           (GPIO_ResetBits(KEYPAD_GPIO,x))
 /*******************************************************************************
  * Variable
  ******************************************************************************/
@@ -25,10 +33,10 @@ const char Keypad_Button_Values[4][4] =  {
  ******************************************************************************/
 /*!
  * @brief Set high all col
- *
  * @param none
+ * @retval none
  */
-static void setHighAllCol()
+static void KEYPAD_SetHighAllCol()
 {
     KEYPAD_SET_COL(KEYPAD_COL_1);
     KEYPAD_SET_COL(KEYPAD_COL_2);
@@ -41,7 +49,7 @@ static void setHighAllCol()
  *
  * @param none
  */
-static void setLowAllCol()
+static void KEYPAD_SetLowAllCol()
 {
     KEYPAD_CLR_COL(KEYPAD_COL_1);
     KEYPAD_CLR_COL(KEYPAD_COL_2);
@@ -54,13 +62,12 @@ static void setLowAllCol()
  * @param col_index     index of col
  * @return  none 
  */
-static void setColX(col_index index)
+static void KEYPAD_SetColX(col_index index)
 {
-    setLowAllCol();
+    KEYPAD_SetLowAllCol();
     switch (index)
     {
     case (Col_1):
-        /* code */
         KEYPAD_SET_COL(KEYPAD_COL_1);
         break;
     case Col_2:
@@ -83,10 +90,10 @@ static void setColX(col_index index)
  * @return return PRESS: key pressed
  *         return NOT_PRESS: key not press
  */
-static uint32_t isKeyPressed()
+static uint32_t KEYPAD_IsKeyPressed()
 {
     uint8_t keyStatus = NOT_PRESS;
-    setHighAllCol();
+    KEYPAD_SetHighAllCol();
     if( KEYPAD_READ_ROW(KEYPAD_ROW_1)||
         KEYPAD_READ_ROW(KEYPAD_ROW_2)||
         KEYPAD_READ_ROW(KEYPAD_ROW_3)||
@@ -101,7 +108,7 @@ static uint32_t isKeyPressed()
  * @param 
  * @param 
  */
-static uint8_t rowCheck()
+static uint8_t KEYPAD_RowCheck()
 {
     uint32_t retVal;
     if(KEYPAD_READ_ROW(KEYPAD_ROW_1))
@@ -183,32 +190,32 @@ char KEYPAD_ScanKey()
 {
     char key = NO_KEY;
     uint32_t rowVal;
-    if(isKeyPressed())
+    if(KEYPAD_IsKeyPressed())
     {
         /* Debounce time */
-        SYSTICK_Delay_ms(10);
-        if(isKeyPressed())
+        SYSTICK_Delay_ms(20);
+        if(KEYPAD_IsKeyPressed())
         {
-            setColX(Col_1);
-            rowVal = rowCheck();
+            KEYPAD_SetColX(Col_1);
+            rowVal = KEYPAD_RowCheck();
             if(rowVal != NO_ROW)
                 key = Keypad_Button_Values[rowVal][Col_1];
             else
             {
-                setColX(Col_2);
-                rowVal = rowCheck();
+                KEYPAD_SetColX(Col_2);
+                rowVal = KEYPAD_RowCheck();
                 if(rowVal != NO_ROW)
                     key = Keypad_Button_Values[rowVal][Col_2];
                 else
                 {
-                    setColX(Col_3);
-                    rowVal = rowCheck();
+                    KEYPAD_SetColX(Col_3);
+                    rowVal = KEYPAD_RowCheck();
                     if(rowVal != NO_ROW)
                         key = Keypad_Button_Values[rowVal][Col_3];
                     else
                     {
-                        setHighAllCol();
-                        rowVal = rowCheck();
+                        KEYPAD_SetHighAllCol();
+                        rowVal = KEYPAD_RowCheck();
                         if(rowVal != NO_ROW)
                             key = Keypad_Button_Values[rowVal][Col_4];
                     }

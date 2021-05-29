@@ -1,0 +1,35 @@
+#ifndef __BOARD__
+#define __BOARD__
+
+/* ----------keypad---------- */
+/* keypad gpio  */
+#define KEYPAD_GPIO       GPIOA
+/* keypad pin */
+#define KEYPAD_COL_1      GPIO_Pin_4
+#define KEYPAD_COL_2      GPIO_Pin_5
+#define KEYPAD_COL_3      GPIO_Pin_6
+#define KEYPAD_COL_4      GPIO_Pin_7
+#define KEYPAD_ROW_1      GPIO_Pin_8
+#define KEYPAD_ROW_2      GPIO_Pin_9
+#define KEYPAD_ROW_3      GPIO_Pin_1
+#define KEYPAD_ROW_4      GPIO_Pin_0
+/* Power_communicate */
+#define POWER_COM_UART              USART1
+#define POWER_COM_IRQn              USART1_IRQn
+#define POWER_COM_GPIO              GPIOB
+#define POWER_COM_RxPIN             GPIO_Pin_7
+#define POWER_COM_TxPIN             GPIO_Pin_6
+#define POWER_COM_GPIO_CLK          RCC_APB2Periph_GPIOB
+#define POWER_COM_CLK               RCC_APB2Periph_USART1
+
+/* Safe key  */
+#define SAFE_KEY_GPIO               GPIOB
+#define SAFE_KEY_PIN_OUT            GPIO_Pin_11
+#define SAFE_KEY_PIN_IN             GPIO_Pin_10
+#define SAFE_KEY_TIMER              TIM2
+#define SAFE_KEY_TIMER_CLK          RCC_APB1Periph_TIM2
+#define SAFE_KEY_GPIO_CLK           RCC_APB2Periph_GPIOB
+#endif /* __BOARD__ */
+/*******************************************************************************
+* EOF
+*******************************************************************************/

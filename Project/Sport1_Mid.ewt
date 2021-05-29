@@ -3067,6 +3067,15 @@
     <group>
         <name>Driver_User</name>
         <group>
+            <name>dfplayer</name>
+            <file>
+                <name>$PROJ_DIR$\..\Driver_User\src\dfplayer.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\Driver_User\inc\dfplayer.h</name>
+            </file>
+        </group>
+        <group>
             <name>keypad</name>
             <file>
                 <name>$PROJ_DIR$\..\Driver_User\src\keypad.c</name>
@@ -3135,6 +3144,9 @@
                 <name>$PROJ_DIR$\..\Mid\inc\run_mode.h</name>
             </file>
             <file>
+                <name>$PROJ_DIR$\..\Mid\inc\safety_checking.h</name>
+            </file>
+            <file>
                 <name>$PROJ_DIR$\..\Mid\inc\screen.h</name>
             </file>
             <file>
@@ -3157,6 +3169,9 @@
             </file>
             <file>
                 <name>$PROJ_DIR$\..\Mid\src\run_mode.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\Mid\src\safety_checking.c</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\Mid\src\screen.c</name>

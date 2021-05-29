@@ -1,11 +1,6 @@
 #ifndef __KEY_PAD_H__
 #define __KEY_PAD_H__
-/*******************************************************************************
- * Include file
- ******************************************************************************/
-#include "stm32f10x.h"
-#include "stm32f10x_gpio.h"
-#include "stdint.h"
+
 /*******************************************************************************
  * Definition
  ******************************************************************************/
@@ -27,22 +22,7 @@
 
 #define NO_KEY            (0xff)
 
-/* keypad gpio  */
-#define KEYPAD_GPIO       GPIOA
-#define KEYPAD_COL_1      GPIO_Pin_0
-#define KEYPAD_COL_2      GPIO_Pin_1
-#define KEYPAD_COL_3      GPIO_Pin_2
-#define KEYPAD_COL_4      GPIO_Pin_3
-#define KEYPAD_ROW_1      GPIO_Pin_4
-#define KEYPAD_ROW_2      GPIO_Pin_5
-#define KEYPAD_ROW_3      GPIO_Pin_6
-#define KEYPAD_ROW_4      GPIO_Pin_7
 
-/* Read write macro */
-#define KEYPAD_READ_ALL_ROW         (GPIO_ReadInputData(KEYPAD_GPIO))
-#define KEYPAD_READ_ROW(x)          (GPIO_ReadInputDataBit(KEYPAD_GPIO, x))
-#define KEYPAD_SET_COL(x)           (GPIO_SetBits(KEYPAD_GPIO,x))
-#define KEYPAD_CLR_COL(x)           (GPIO_ResetBits(KEYPAD_GPIO,x))
 
 /* col and row index enum */
 typedef enum

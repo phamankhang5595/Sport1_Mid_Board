@@ -17,19 +17,20 @@ void SYSTICK_Init(void);
 
  /*!
  * @brief functions hander systick.
+ * @retval none
  *
  */
 void SysTick_Handler(void);
 
 /*!
  * @brief functions get tick.
- *
+ * @retval tick
  */
-uint32_t SYSTICK_Get_Tick(void);
+uint32_t SYSTICK_GetTick(void);
 
 /*!
  * @brief function to create delay.
- *
+ * @retval none
  */
 void SYSTICK_Delay_ms(uint32_t time_ms);
 

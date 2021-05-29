@@ -1,7 +1,6 @@
 #include "exercise_mode.h"
 #include "keypad.h"
 #include "screen.h"
-#include "lcd.h"
 #include "systick.h"
 /*******************************************************************************
  * Variable
@@ -29,36 +28,36 @@ static void blinkTimeLed();
 /*!
  * @brief function reset all exercise info: TIME, EXE
  *
- * @param mechineData  
+ * @param treadmillData  
 */
-static void reset_ex_value(run_mechine_data_t *mechineData);
+static void reset_ex_value(run_mechine_data_t *treadmillData);
 /*******************************************************************************
  * Code
  ******************************************************************************/
 /*!
  * @brief The exercise mode
  *
- * @param mechineData
+ * @param treadmillData
  * @param laststate 
  * @return State of program
 */
-program_state_t exercise_mode(run_mechine_data_t *mechineData, program_state_t *laststate)
+program_state_t exercise_mode(run_mechine_data_t *treadmillData, program_state_t *laststate)
 {
     static program_state_t stateReturn;
     char key;
     /* reset time, incline for new exercise*/
     if(ResetVal == YES)
     {
-        reset_ex_value(mechineData);
+        reset_ex_value(treadmillData);
         ResetVal = NO;
     }
 
     /* update screen */
     if(IsDataChanged == YES)
     {
-        updateEx(mechineData->runEx);               /* exercise */
+        SCREEN_UpdateEx(treadmillData->runEx);               /* exercise */
         SYSTICK_Delay_ms(50);
-        updateTime(mechineData->runTime);           /* Run time */
+        SCREEN_UpdateTime(treadmillData->runTime);           /* Run time */
         IsDataChanged = NO;
     }
 
@@ -78,43 +77,49 @@ program_state_t exercise_mode(run_mechine_data_t *mechineData, program_state_t *
     {
         case EXE_KEY:
             while(KEYPAD_ScanKey()==EXE_KEY);
-            mechineData->runEx += 1;
-            if(mechineData->runEx > MAX_RUN_EX)
-                mechineData->runEx = DEFAULT_RUN_EX;
+            treadmillData->runEx += 1;
+            if(treadmillData->runEx > MAX_RUN_EX)
+                treadmillData->runEx = DEFAULT_RUN_EX;
+            SCREEN_Tone();
             ResetVal = YES;
             IsDataChanged = YES;
             stateReturn = EXERCISE_SET;
             break;
         case PLUS_KEY:
-            mechineData->runTime += 60;
-            if(mechineData->runTime > MAX_RUN_TIME)
-                mechineData->runTime = MIN_RUN_TIME;
+            treadmillData->runTime += 60;
+            if(treadmillData->runTime > MAX_RUN_TIME)
+                treadmillData->runTime = MIN_RUN_TIME;
+            SCREEN_Tone();
             IsDataChanged = YES;
             stateReturn = EXERCISE_SET;
             break;
         case MINUS_KEY:
-            mechineData->runTime -= 60;
-            if(mechineData->runTime < MIN_RUN_TIME)
-                mechineData->runTime = MAX_RUN_TIME;
+            treadmillData->runTime -= 60;
+            if(treadmillData->runTime < MIN_RUN_TIME)
+                treadmillData->runTime = MAX_RUN_TIME;
+            SCREEN_Tone();
             IsDataChanged = YES;
             stateReturn = EXERCISE_SET;
             break;
         case UP_KEY:
-            mechineData->runTime += 60;
-            if(mechineData->runTime > MAX_RUN_TIME)
-                mechineData->runTime = MIN_RUN_TIME;
+            treadmillData->runTime += 60;
+            if(treadmillData->runTime > MAX_RUN_TIME)
+                treadmillData->runTime = MIN_RUN_TIME;
+            SCREEN_Tone();
             IsDataChanged = YES;
             stateReturn = EXERCISE_SET;
             break;
         case DOWN_KEY:
-            mechineData->runTime -= 60;
-            if(mechineData->runTime < MIN_RUN_TIME)
-                mechineData->runTime = MAX_RUN_TIME;
+            treadmillData->runTime -= 60;
+            if(treadmillData->runTime < MIN_RUN_TIME)
+                treadmillData->runTime = MAX_RUN_TIME;
+            SCREEN_Tone();
             IsDataChanged = YES;
             stateReturn = EXERCISE_SET;
             break;
         case STOP_KEY:
-            reset_run_mechineData(mechineData);
+            SCREEN_Tone();
+            reset_run_treadmillData(treadmillData);
             IsDataChanged = YES;
             IsThisTheFirstTimeRun = YES;
             ResetVal      = YES;
@@ -124,7 +129,7 @@ program_state_t exercise_mode(run_mechine_data_t *mechineData, program_state_t *
             IsDataChanged = YES;
             IsThisTheFirstTimeRun = YES;
             ResetVal      = YES;
-            
+            SCREEN_Tone();
             stateReturn = RUN;
             break;
         default:
@@ -140,8 +145,8 @@ static void blinkTimeLed()
     CountForBlink++;
     if(CountForBlink == BLINK_FREQ)
     {
-        lcd_clr_section(0,1);
-        lcd_clr_section(8,3);
+        SCREEN_ClearSection(0,1);
+        SCREEN_ClearSection(8,3);
     }
     else if(CountForBlink == 2*BLINK_FREQ)
     {
@@ -150,29 +155,29 @@ static void blinkTimeLed()
     }
 }
 
-static void reset_ex_value(run_mechine_data_t *mechineData)
+static void reset_ex_value(run_mechine_data_t *treadmillData)
 {
     /* time: 30 min */
-    mechineData->runTime = 1800;
-    switch(mechineData->runEx)
+    treadmillData->runTime = 1800;
+    switch(treadmillData->runEx)
     {
         case 7:
-            mechineData->incline = 2;
+            treadmillData->incline = 2;
             break;
         case 10:
-            mechineData->incline = 9;
+            treadmillData->incline = 9;
             break;
         case 11:
-            mechineData->incline = 9;
+            treadmillData->incline = 9;
             break;
         case 12:
-            mechineData->incline = 2;
+            treadmillData->incline = 2;
             break;
         default:
-            mechineData->incline = 0;
+            treadmillData->incline = 0;
             break;
     }
-    updateIncline(mechineData->incline);
+    SCREEN_UpdateIncline(treadmillData->incline);
     ResetVal = NO;
 }
 /*******************************************************************************

@@ -12,6 +12,7 @@ typedef enum
     EXERCISE_SET,
     SET_UP,
     STOP,
+    FAULT,
     IDLE
 } program_state_t;
 
@@ -58,5 +59,5 @@ extern uint32_t IsThisTheFirstTimeRun;
 /*******************************************************************************
  * API
  ******************************************************************************/
-void reset_run_mechineData(run_mechine_data_t *mechineData);
+void reset_run_treadmillData(run_mechine_data_t *treadmillData);
 #endif /* common.h */

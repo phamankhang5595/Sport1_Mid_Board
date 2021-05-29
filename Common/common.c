@@ -7,11 +7,11 @@ uint32_t IsThisTheFirstTimeRun = YES;
 /*******************************************************************************
  * Code
  ******************************************************************************/
-void reset_run_mechineData(run_mechine_data_t *mechineData)
+void reset_run_treadmillData(run_mechine_data_t *treadmillData)
 {
-    mechineData->calo       = 0;
-    mechineData->distance   = 0;
-    mechineData->incline    = 0;
-    mechineData->runEx      = DEFAULT_RUN_EX;
-    mechineData->runTime    = 0;
+    treadmillData->calo       = 0;
+    treadmillData->distance   = 0;
+    treadmillData->incline    = 0;
+    treadmillData->runEx      = DEFAULT_RUN_EX;
+    treadmillData->runTime    = 0;
 }

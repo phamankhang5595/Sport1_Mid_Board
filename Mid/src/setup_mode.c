@@ -1,8 +1,7 @@
-#include "setup_mode.h"
 #include "keypad.h"
 #include "systick.h"
 #include "screen.h"
-#include "lcd.h"
+#include "setup_mode.h"
 /*******************************************************************************
  * Variables
  ******************************************************************************/
@@ -22,10 +21,10 @@ uint32_t CountForBlink;
  * @brief Increase the value according to the mode
  *        runtime, distance, calo <=> mode: 0 1 2
  *
- * @param mechineData
+ * @param treadmillData
  * @return None 
  */
-static void increase_val(run_mechine_data_t *mechineData);
+static void increase_val(run_mechine_data_t *treadmillData);
 
 
 /*!
@@ -34,7 +33,7 @@ static void increase_val(run_mechine_data_t *mechineData);
  * @param 
  * @param 
  */
-static void decrease_val(run_mechine_data_t *mechineData);
+static void decrease_val(run_mechine_data_t *treadmillData);
 
 /*!
  * @brief change data to default
@@ -42,18 +41,18 @@ static void decrease_val(run_mechine_data_t *mechineData);
  * @param 
  * @param 
 */
-void reset_data_to_default(run_mechine_data_t *mechineData, uint8_t ModeState);
+void reset_data_to_default(run_mechine_data_t *treadmillData, uint8_t ModeState);
 /*******************************************************************************
  * Code
  ******************************************************************************/
 /*!
  * @brief The setup mode
  *
- * @param mechineData
+ * @param treadmillData
  * @param laststate 
  * @return State of program
 */
-program_state_t setup_mode(run_mechine_data_t *mechineData, program_state_t *laststate)
+program_state_t setup_mode(run_mechine_data_t *treadmillData, program_state_t *laststate)
 {
     program_state_t stateReturn;
     char key = NO_KEY;
@@ -62,14 +61,14 @@ program_state_t setup_mode(run_mechine_data_t *mechineData, program_state_t *las
     {
         while(KEYPAD_ScanKey()==SETUP_KEY);
         IsThisTheFirstTimeRun = NO;
-        mechineData->runTime = 900;/* default value 15 min */
+        treadmillData->runTime = 900;/* default value 15 min */
     }
     /* Show screen */
     if(IsDataChanged == YES)
     {
-        updateTime(mechineData->runTime);
-        updateDistance(mechineData->distance);
-        updateCalo(mechineData->calo);
+        SCREEN_UpdateTime(treadmillData->runTime);
+        SCREEN_UpdateDistance(treadmillData->distance);
+        SCREEN_UpdateCalo(treadmillData->calo);
         IsDataChanged = NO;
     }
     /* use a variable Count blink led */
@@ -78,13 +77,13 @@ program_state_t setup_mode(run_mechine_data_t *mechineData, program_state_t *las
     {
         if (ModeState==0)
         {
-            lcd_clr_section(0,1);
-            lcd_clr_section(8,3);
+            SCREEN_ClearSection(0,1);
+            SCREEN_ClearSection(8,3);
         }
         else if (ModeState == 1)
-            lcd_clr_section(14,3);
+            SCREEN_ClearSection(14,3);
         else if(ModeState == 2)
-            lcd_clr_section(20,3);
+            SCREEN_ClearSection(20,3);
     }
     else if(CountForBlink == 2*BLINK_FREQ)
     {
@@ -97,39 +96,46 @@ program_state_t setup_mode(run_mechine_data_t *mechineData, program_state_t *las
     switch(key)
     {
         case SETUP_KEY:
+            SCREEN_Tone();
             while(KEYPAD_ScanKey()==SETUP_KEY);
             ModeState += 1;
             /* clear data */
-            reset_data_to_default(mechineData, ModeState);
+            reset_data_to_default(treadmillData, ModeState);
             IsDataChanged = YES;
             stateReturn = SET_UP;
             break;
         case PLUS_KEY:
-            increase_val(mechineData);
+            SCREEN_Tone();
+            increase_val(treadmillData);
             IsDataChanged = YES;
             stateReturn = SET_UP;
             break;
         case MINUS_KEY:
-            decrease_val(mechineData);
+            SCREEN_Tone();
+            decrease_val(treadmillData);
             IsDataChanged = YES;
             stateReturn = SET_UP;
             break;
         case UP_KEY:
-            increase_val(mechineData);
+            SCREEN_Tone();
+            increase_val(treadmillData);
             IsDataChanged = YES;
             stateReturn = SET_UP;
             break;
         case DOWN_KEY:
-            decrease_val(mechineData);
+            SCREEN_Tone();
+            decrease_val(treadmillData);
             IsDataChanged = YES;
             stateReturn = SET_UP;
             break;
         case RUN_KEY:
+            SCREEN_Tone();
             IsDataChanged = YES;
             IsThisTheFirstTimeRun = YES;
             stateReturn = RUN;
             break;
         case STOP_KEY:
+            SCREEN_Tone();
             IsDataChanged = YES;
             IsThisTheFirstTimeRun = YES;
             stateReturn = START;
@@ -151,63 +157,63 @@ program_state_t setup_mode(run_mechine_data_t *mechineData, program_state_t *las
 }
 
 
-static void increase_val(run_mechine_data_t *mechineData)
+static void increase_val(run_mechine_data_t *treadmillData)
 {
     if(ModeState == 0)
     {
-        mechineData->runTime += 60;
-        if(mechineData->runTime > MAX_RUN_TIME)
-            mechineData->runTime = 60;
+        treadmillData->runTime += 60;
+        if(treadmillData->runTime > MAX_RUN_TIME)
+            treadmillData->runTime = 60;
     }
     else if(ModeState == 1)
     {
-        mechineData->distance += 10;
-        if(mechineData->distance > MAX_DISTANCE)
-            mechineData->distance = 10;
+        treadmillData->distance += 10;
+        if(treadmillData->distance > MAX_DISTANCE)
+            treadmillData->distance = 10;
     }
     else if(ModeState == 2)
     {
-        mechineData->calo += 10;
-        if(mechineData->calo > MAX_CALO)
-            mechineData->calo = 10;
+        treadmillData->calo += 10;
+        if(treadmillData->calo > MAX_CALO)
+            treadmillData->calo = 10;
     }
 }
 
-static void decrease_val(run_mechine_data_t *mechineData)
+static void decrease_val(run_mechine_data_t *treadmillData)
 {
     if(ModeState == 0)
     {
-        if(mechineData->runTime > 300)
-            mechineData->runTime -= 60;
+        if(treadmillData->runTime > 300)
+            treadmillData->runTime -= 60;
         else
-            mechineData->runTime = MAX_RUN_TIME;
+            treadmillData->runTime = MAX_RUN_TIME;
     }
     else if(ModeState == 1)
     {
-        mechineData->distance -= 10;
-        if(mechineData->distance < 1)
-            mechineData->distance = MAX_DISTANCE;
+        treadmillData->distance -= 10;
+        if(treadmillData->distance < 1)
+            treadmillData->distance = MAX_DISTANCE;
     }
     else if(ModeState == 2)
     {
         
-        mechineData->calo -= 10;
-        if(mechineData->calo < 10)
-            mechineData->calo = MAX_CALO;
+        treadmillData->calo -= 10;
+        if(treadmillData->calo < 10)
+            treadmillData->calo = MAX_CALO;
     }
 }
 
-void reset_data_to_default(run_mechine_data_t *mechineData, uint8_t ModeState)
+void reset_data_to_default(run_mechine_data_t *treadmillData, uint8_t ModeState)
 {
     switch (ModeState)
     {
         case 1:
-            mechineData->runTime = 0;
-            mechineData->distance = 100;
+            treadmillData->runTime = 0;
+            treadmillData->distance = 100;
             break;
         case 2:
-            mechineData->distance = 0;
-            mechineData->calo = 500;
+            treadmillData->distance = 0;
+            treadmillData->calo = 500;
             break;
         default:
             break;

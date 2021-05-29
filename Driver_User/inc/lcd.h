@@ -2,7 +2,7 @@
  
 #ifndef	_LCD_H_ 
 #define _LCD_H_ 
-#define SIZE_BUFF (1U)
+#define SIZE_BUFF   (1U)
 #define DOT_SEG_1   (0x80)
 #define DOT_SEG_2   (0x08)
 
@@ -26,8 +26,8 @@
 #define ADD_INCL_0  (28U)
 #define ADD_INCL_1  (30U)
 
-void GPIO_LcdInit(void);					// lcd gpio��ʼ�� 
-void lcd_init(void);
+void LCD_GpioInit(void);					// lcd gpio��ʼ�� 
+void LCD_Init(void);
 void test_line(void);// lcd ģ���ʼ��	 
 void lcd_show_data(unsigned char *puts);// lcd ��ʾ��������ϣ����ʾ��12345678�����ɴ��롰12345678����data�ĳ̶Ȳ���С��8 
 void lcd_clr(void);	

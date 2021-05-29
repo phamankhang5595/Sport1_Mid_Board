@@ -8,7 +8,7 @@
 /*******************************************************************************
  * API
  ******************************************************************************/
-program_state_t start_mode(run_mechine_data_t *mechineData, program_state_t *laststate);
+program_state_t start_mode(run_mechine_data_t *treadmillData, program_state_t *laststate);
 #endif
 /*******************************************************************************
  * EOF
